@@ -53,6 +53,12 @@ export class TuiAgentStates {
       return;
     }
 
+    // Status payloads that carry the provider's session id keep the stored id in
+    // step with the live process (e.g. after an in-session `/resume`).
+    if (event.providerSessionId) {
+      this.setProviderSessionId(conversationId, event.providerSessionId);
+    }
+
     if (event.type === 'start') {
       this.setStatus(conversationId, {
         providerId,
