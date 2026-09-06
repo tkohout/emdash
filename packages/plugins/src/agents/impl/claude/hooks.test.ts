@@ -77,6 +77,20 @@ describe('claude hooks', () => {
     ).toEqual({ kind: 'session', providerSessionId: RESUMED_SESSION_ID });
   });
 
+  it('resumes the tracked provider session id instead of the conversation id', () => {
+    const command = provider.behavior.prompt!.buildCommand({
+      cli: 'claude',
+      autoApprove: false,
+      initialPrompt: undefined,
+      sessionId: 'conversation-1',
+      providerSessionId: RESUMED_SESSION_ID,
+      isResuming: true,
+      model: '',
+    });
+
+    expect(command.args).toEqual(['--resume', RESUMED_SESSION_ID]);
+  });
+
   it('declares session as a supported hook event', () => {
     expect(provider.capabilities.hooks).toEqual({
       kind: 'config',
